@@ -2,14 +2,17 @@ import React, { Component } from 'react'
 import Shadow from './shadow'
 
 class Touch extends Component {
-  getInitialState() {
-    return {
-      type: 'init';
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: 'init',
+      shadow: []
+    };
   }
   click() {
     this.setState({
-      type: 'click'
+      type: 'click',
+      shadow: this.state.shadow.push(<Shadow {...this.props}></Shadow>)
     })
   }
   render() {
@@ -20,11 +23,15 @@ class Touch extends Component {
       default:
         break;
     }
-    let shadow += <Shadow {...this.props,this.state.type}></Shadow>;
-    return (
-      <div onclick={this.click}>
+    const dom = (
+      <div>
         {this.props.children}
-        {shadow}
+        {this.state.shadow}
+      </div>)
+    return (
+      <div>
+        {dom}
+        
       </div>
     )
   }

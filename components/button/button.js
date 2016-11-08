@@ -4,9 +4,13 @@ import Touch from './touch'
 class Button extends Component {
   render() {
     return (
-      <Touch {...this.props}>
-        <button ></button>
-      </Touch>
+      <button>
+        <Touch {...this.props}>
+          {this.props.children}
+        </Touch>
+      </button>
     )
   }
 }
+
+export default Button

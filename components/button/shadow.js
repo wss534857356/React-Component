@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 const style = {
-  shadow: {,
+  shadow: {
     position: 'absolute',
     borderRadius: '50%',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
@@ -18,11 +18,12 @@ const style = {
   }
 }
 class Shadow extends Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       shadow_style: style.shadow_init,
       dom: '<div></div>'
-    }
+    };
   }
   eventOrdinate(ev, type) {
     const event = {};
@@ -75,7 +76,6 @@ class Shadow extends Component {
     style.shadow_click.diameter = radius.diameter;
     this.setState({
       shadow_style: style.shadow_click,
-      dom: '<div styles={[style.shadow, this.state.shadow_style]}></div>'
     });
     setTimeout(function () {
       this.setState({
@@ -90,7 +90,10 @@ class Shadow extends Component {
         break;
       default : break;
     }
-    return ({this.state.dom})
+    let dom = this.state.dom
+    return (
+      <div style={[style.shadow, this.state.shadow_style]}></div>
+    )
   }
 }
 export default Shadow
