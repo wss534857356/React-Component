@@ -11,7 +11,8 @@ function Home({ number, increase, decrease }) {
       {number},
       <button onClick={() => increase(1)}>Increase</button>
       <button onClick={() => decrease(1)}>Decrease</button>
-      <Button>你好</Button>
+      <Button width="200px" >你好</Button>
+      <Button width="200px" >登入</Button>
     </div>
   )
 }

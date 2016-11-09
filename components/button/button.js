@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Touch from './touch'
 import Shadow from './shadow'
 import { findDOMNode } from 'react-dom'
 
@@ -8,6 +7,9 @@ const style = {
     display:'block',
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
     marginTop: '20px',
+    borderRadius: '2px',
+    height: '36px',
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
     width: '20%'
   },
   button: {
@@ -15,11 +17,10 @@ const style = {
     padding: 0,
     margin: 0,
     textDecoration: 'none',
-    height: '36px',
-    lineHeight: '36px',
+    height: 'inherit',
     textAlgin: 'center',
     backgroundColor: '#2196F3',
-    borderRadius: '2px',
+    borderRadius: 'inherit',
     border: '10px',
     boxSizing: 'border-box',
     display: 'inline-block',
@@ -31,8 +32,8 @@ const style = {
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
   },
   fontBox: {
-    height: '36px',
-    borderRadius: '2px',
+    height: 'inherit',
+    borderRadius: 'inherit',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
     top: 0
   },
@@ -61,12 +62,33 @@ const style = {
 class Button extends Component {
   constructor(props) {
     super(props);
+    this.componentStyle();
     this.state = {
       event: [],
       shadow: []
     };
   }
-  handleOpen(event) {
+  componentStyle() {
+    const _props = this.props;
+    const boxStyle = {...style.box};
+    const buttonStyle = {...style.button};
+    const fontStyle = {...style.fontStyle}
+
+    boxStyle.width = _props.width? _props.width: '100%';
+    boxStyle.height = _props.height? _props.height: '36px';
+    boxStyle.borderRadius = _props.radius? _props.radius: '2px';
+
+    buttonStyle.backgroundColor = _props.bgColor? _props.bgColor: '#2196F3';
+
+    fontStyle.color = _props.fontColor? _props.fontColor: 'rgb(255, 255, 255)';
+    fontStyle.fontSize = _props.fontSize? _props.fontSize: '14px';
+
+    style.box = boxStyle;
+    style.button = buttonStyle;
+    style.fontStyle = fontStyle;
+
+  }
+  mouseDown(event) {
     let dom = findDOMNode(this.refs.button);
     let shadow = {
       key: this.state.shadow.length,
@@ -84,14 +106,22 @@ class Button extends Component {
     this.setState({
       shadow: this.state.shadow.concat(shadow)
     });
+    dom.style.boxShadow = 'rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px'
+  }
+  mouseUp(event) {
+    let dom = findDOMNode(this.refs.button);
+    dom.style.boxShadow = 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
   }
   render() {
     let shadowList = this.state.shadow.map(function(shadow) {
       return <Shadow {...shadow} type="click"></Shadow>;
     });
     return (
-      <div style={style.box}>
-        <button style={style.button} onClick={this.handleOpen.bind(this)} ref='button'>
+      <div style={style.box} ref='button'>
+        <button
+          style={style.button}
+          onMouseDown={this.mouseDown.bind(this)}
+          onMouseUp={this.mouseUp.bind(this)}>
           <div onClick={(event) =>{
             window.event.cancelBubble = true;
 /*            event.preventDefault();

@@ -72,16 +72,17 @@ class Shadow extends Component {
   }
   click(event, parent, type){
     const radius = this.radius(event, parent, type);
-    let shadow = style.shadow_init;
-    shadow.left = radius.left + 'px';
-    shadow.top = radius.top + 'px';
-    shadow.width = radius.diameter + 'px';
-    shadow.height = radius.diameter + 'px';
+    let shadow = {
+      ...style.shadow_init,
+      left: radius.left + 'px',
+      top: radius.top + 'px',
+      width: radius.diameter + 'px',
+      height: radius.diameter + 'px'
+    };
     return shadow;
   }
   componentDidMount() {
     let dom = findDOMNode(this);
-    let _shadow = {...style.shadow_init, opacity:0, transform: 'scale(1)'};
     setTimeout(function () {
       dom.style.transform = 'scale(1)';
       dom.style.opacity = '0';
