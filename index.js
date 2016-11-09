@@ -4,6 +4,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import * as reducers from './reducers'
 import { App, Home } from './components'
@@ -13,7 +14,11 @@ const reducer = combineReducers({
   routing: routerReducer
 })
 
-
+injectTapEventPlugin({
+  shouldRejectClick: function (lastTouchEventTimestamp, clickEventTimestamp) {
+    return true;
+  }
+});
 /*
   为onTouchTap解决一下两个issue的临时解决方案, 随时会被取缔：
   https://github.com/facebook/react/issues/436;

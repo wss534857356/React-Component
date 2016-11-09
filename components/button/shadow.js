@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { findDOMNode } from 'react-dom'
 
 const style = {
   shadow: {
@@ -7,23 +8,22 @@ const style = {
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   shadow_init: {
-    opactiy: 0.25,
+    position: 'absolute',
+    borderRadius: '50%',
+    transition: 'opacity 2s cubic-bezier(0.23, 1, 0.32, 1) 0ms, transform 1s cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+    opacity: 0.25,
     transform: 'scale(0)',
-    backgroundColor: '#FFFFFF'
-  },
-  shadow_click: {
-    opactiy: 0,
-    transform: 'scale(1)',
     backgroundColor: '#FFFFFF',
   }
 }
 class Shadow extends Component {
   constructor(props) {
     super(props);
+    let shadow = this.click(this.props.event, this.props.target, this.props.type);
     this.state = {
-      shadow_style: style.shadow_init,
-      dom: '<div></div>'
+      shadow_style: shadow,
     };
+
   }
   eventOrdinate(ev, type) {
     const event = {};
@@ -45,13 +45,14 @@ class Shadow extends Component {
     const setHeight = doc.offsetHeight;
     const setLeft = doc.offsetLeft;
     const setTop = doc.offsetTop;
-
     const tMax = setWidth > setHeight
     ? setWidth
     : setHeight;
-    const event = eventOrdinate(ev, type);
+    const event = this.eventOrdinate(ev, type);
+
     const mLeft = event.eventX - setLeft;
     const mTop = event.eventY - setTop;
+
     const mMax = setWidth > setHeight ? mLeft : mTop;
     const rWidth = mLeft > setWidth/2 
     ? mLeft 
@@ -70,29 +71,29 @@ class Shadow extends Component {
     }
   }
   click(event, parent, type){
-    const radius = radius(event, parent, type);
-    style.shadow_click.left = radius.left;
-    style.shadow_click.top = radius.top;
-    style.shadow_click.diameter = radius.diameter;
-    this.setState({
-      shadow_style: style.shadow_click,
-    });
-    setTimeout(function () {
-      this.setState({
-        dom: ''
-      })
-    },2000);
+    const radius = this.radius(event, parent, type);
+    let shadow = style.shadow_init;
+    shadow.left = radius.left + 'px';
+    shadow.top = radius.top + 'px';
+    shadow.width = radius.diameter + 'px';
+    shadow.height = radius.diameter + 'px';
+    return shadow;
   }
+  componentDidMount() {
+    let dom = findDOMNode(this);
+    let _shadow = {...style.shadow_init, opacity:0, transform: 'scale(1)'};
+    setTimeout(function () {
+      dom.style.transform = 'scale(1)';
+      dom.style.opacity = '0';
+    }, 0);
+    setTimeout(function () {
+      dom.parentNode.removeChild(dom);
+    }, 2000);
+  }
+  
   render(){
-    switch(this.props.type){
-      case 'click':
-        click(this.props.event, this.props.parent, this.props.type);
-        break;
-      default : break;
-    }
-    let dom = this.state.dom
     return (
-      <div style={[style.shadow, this.state.shadow_style]}></div>
+      <div style={this.state.shadow_style}></div>
     )
   }
 }
