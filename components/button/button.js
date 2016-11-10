@@ -108,8 +108,9 @@ class Button extends Component {
     });
     dom.style.boxShadow = 'rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px'
   }
-  mouseUp(event) {
+  removeSelect(event) {
     let dom = findDOMNode(this.refs.button);
+
     dom.style.boxShadow = 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
   }
   render() {
@@ -121,12 +122,10 @@ class Button extends Component {
         <button
           style={style.button}
           onMouseDown={this.mouseDown.bind(this)}
-          onMouseUp={this.mouseUp.bind(this)}>
-          <div onClick={(event) =>{
-            window.event.cancelBubble = true;
-/*            event.preventDefault();
-            event.stopPropagation();*/
-          }}>
+          onMouseUp={this.removeSelect.bind(this)}
+          onMouseOut={this.removeSelect.bind(this)}
+          onClick={this.props.onClick}>
+          <div>
             <span style={style.shadowBox} ref="shadow">
               {shadowList}
             </span>

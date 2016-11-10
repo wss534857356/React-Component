@@ -1,4 +1,4 @@
-import { INCREASE, DECREASE } from '../constants'
+import { INCREASE, DECREASE, TIMES } from '../constants'
 
 export function increase(n) {
   return {
@@ -11,5 +11,13 @@ export function decrease(n) {
   return {
     type: DECREASE,
     amount: n
+  }
+}
+
+export function time(n, state, delay = 1000) {
+  return (dispatch) => {
+    setTimeout(() => {
+      dispatch(increase(n));
+    }, delay)
   }
 }
