@@ -60,6 +60,7 @@ const style = {
   }
 }
 class Button extends Component {
+  style = {...style};
   constructor(props) {
     super(props);
     this.componentStyle();
@@ -70,9 +71,9 @@ class Button extends Component {
   }
   componentStyle() {
     const _props = this.props;
-    const boxStyle = {...style.box};
-    const buttonStyle = {...style.button};
-    const fontStyle = {...style.fontStyle}
+    const boxStyle = {...this.style.box};
+    const buttonStyle = {...this.style.button};
+    const fontStyle = {...this.style.fontStyle}
 
     boxStyle.width = _props.width? _props.width: '100%';
     boxStyle.height = _props.height? _props.height: '36px';
@@ -83,9 +84,9 @@ class Button extends Component {
     fontStyle.color = _props.fontColor? _props.fontColor: 'rgb(255, 255, 255)';
     fontStyle.fontSize = _props.fontSize? _props.fontSize: '14px';
 
-    style.box = boxStyle;
-    style.button = buttonStyle;
-    style.fontStyle = fontStyle;
+    this.style.box = boxStyle;
+    this.style.button = buttonStyle;
+    this.style.fontStyle = fontStyle;
 
   }
   mouseDown(event) {
@@ -118,19 +119,19 @@ class Button extends Component {
       return <Shadow {...shadow} type="click"></Shadow>;
     });
     return (
-      <div style={style.box} ref='button'>
+      <div style={this.style.box} ref='button'>
         <button
-          style={style.button}
+          style={this.style.button}
           onMouseDown={this.mouseDown.bind(this)}
           onMouseUp={this.removeSelect.bind(this)}
           onMouseOut={this.removeSelect.bind(this)}
           onClick={this.props.onClick}>
           <div>
-            <span style={style.shadowBox} ref="shadow">
+            <span style={this.style.shadowBox} ref="shadow">
               {shadowList}
             </span>
-            <div style={style.fontBox}>
-              <span style={style.fontStyle}>
+            <div style={this.style.fontBox}>
+              <span style={this.style.fontStyle}>
                 {this.props.children}
               </span>
             </div>
